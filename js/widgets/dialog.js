@@ -1,7 +1,6 @@
-$.widget( "metro.dialog" , {
+$.widget("metro.dialog", {
 
     version: "3.0.14",
-
     options: {
         modal: false,
         overlay: false,
@@ -24,14 +23,13 @@ $.widget( "metro.dialog" , {
         closeAction: true,
         closeElement: ".js-dialog-close",
 
-        onDialogOpen: function(dialog){},
-        onDialogClose: function(dialog){}
+        onDialogOpen: function (dialog) {},
+        onDialogClose: function (dialog) {}
     },
 
     _create: function () {
         var that = this, element = this.element, o = this.options;
-
-        $.each(element.data(), function(key, value){
+        $.each(element.data(), function (key, value) {
             if (key in o) {
                 try {
                     o[key] = $.parseJSON(value);
@@ -51,7 +49,7 @@ $.widget( "metro.dialog" , {
         this._createDialog();
 
         if (o.closeAction === true) {
-            element.on("click", ".js-dialog-close" + o.closeElement, function(){
+            element.on("click", ".js-dialog-close" + o.closeElement, function () {
                 that.close();
             });
         }
@@ -64,13 +62,15 @@ $.widget( "metro.dialog" , {
         }
     },
 
-    _createOverlay: function(){
+    _createOverlay: function () {
         var that = this, element = this.element, o = this.options;
-        var overlay = $('body').find('.dialog-overlay');
+//        var overlay = $('body').find('.dialog-overlay');
+//
+//        if (overlay.length === 0) {
+//            overlay = $("<div/>").addClass('dialog-overlay');
+//        }
 
-        if (overlay.length === 0) {
-            overlay = $("<div/>").addClass('dialog-overlay');
-        }
+        var overlay = $("<div/>").addClass('dialog-overlay').addClass(element.attr('id'));
 
         if (o.overlayColor) {
             if (metroUtils.isColor(o.overlayColor)) {
@@ -85,7 +85,7 @@ $.widget( "metro.dialog" , {
         this._overlay = overlay;
     },
 
-    _createDialog: function(){
+    _createDialog: function () {
         var that = this, element = this.element, o = this.options;
 
         element.addClass('dialog');
@@ -129,7 +129,7 @@ $.widget( "metro.dialog" , {
         });
 
         if (o.closeButton) {
-            $("<span/>").addClass('dialog-close-button').appendTo(element).on('click', function(){
+            $("<span/>").addClass('dialog-close-button').appendTo(element).on('click', function () {
                 that.close();
             });
         }
@@ -137,98 +137,107 @@ $.widget( "metro.dialog" , {
         this._hide();
     },
 
-    _hide: function(){
+    _hide: function () {
         var element = this.element, o = this.options;
         element.css({
-           visibility: "hidden"
+            visibility: "hidden"
         });
+
         if (o.removeOnClose === true) {
             element.remove();
         }
     },
 
-    _show: function(){
+    _show: function () {
         var that = this, element = this.element, o = this.options;
 
         this._setContent();
-
         element.css({
-           visibility: "visible"
+            visibility: "visible"
         });
     },
 
-    _setPosition: function(){
+    _setPosition: function () {
         var that = this, element = this.element, o = this.options;
         var width = element.outerWidth(),
-            height = element.outerHeight();
+                height = element.outerHeight();
 
         switch (o.place) {
-            case 'top-left': {
+            case 'top-left':
+            {
                 element.css({
                     left: 0,
                     top: 0
                 });
                 break;
             }
-            case 'top-right': {
+            case 'top-right':
+            {
                 element.css({
                     right: 0,
                     top: 0
                 });
                 break;
             }
-            case 'top-center': {
+            case 'top-center':
+            {
                 element.css({
-                    left: ( $(window).width() - width ) / 2,
+                    left: ($(window).width() - width) / 2,
                     top: 0
                 });
                 break;
             }
-            case 'bottom-left': {
+            case 'bottom-left':
+            {
                 element.css({
                     left: 0,
                     bottom: 0
                 });
                 break;
             }
-            case 'bottom-right': {
+            case 'bottom-right':
+            {
                 element.css({
                     right: 0,
                     bottom: 0
                 });
                 break;
             }
-            case 'center-left': {
+            case 'center-left':
+            {
                 element.css({
                     left: 0,
-                    top: ( $(window).height() - height ) / 2
+                    top: ($(window).height() - height) / 2
                 });
                 break;
             }
-            case 'center-right': {
+            case 'center-right':
+            {
                 element.css({
                     right: 0,
-                    top: ( $(window).height() - height ) / 2
+                    top: ($(window).height() - height) / 2
                 });
                 break;
             }
-            case 'bottom-center': {
+            case 'bottom-center':
+            {
                 element.css({
-                    left: ( $(window).width() - width ) / 2,
+                    left: ($(window).width() - width) / 2,
                     bottom: 0
                 });
                 break;
             }
-            default: {
+            default:
+            {
                 element.css({
-                    left: o.windowsStyle === false ? ( $(window).width() - width ) / 2 : 0,
-                    top: ( $(window).height() - height ) / 2
+                    left: o.windowsStyle === false ? ($(window).width() - width) / 2 : 0,
+                    top: ($(window).height() - height) / 2
                 });
             }
         }
     },
 
-    _setContent: function(){
+    _setContent: function () {
         var that = this, element = this.element, o = this.options;
         var content = $("<div>").addClass("set-dialog-content");
 
@@ -258,38 +267,38 @@ $.widget( "metro.dialog" , {
 
         if (o.href) {
             $.get(
-                o.href,
-                function(response){
-                    content.html(response);
-                    that._setPosition();
-                }
+                    o.href,
+                    function (response) {
+                        content.html(response);
+                        that._setPosition();
+                    }
             );
         }
 
     },
 
-    setContent: function(content){
+    setContent: function (content) {
         this.options.contentType = "default";
         this.options.href = false;
         this.options.content = content;
         this._setContent();
     },
 
-    setContentHref: function(href){
+    setContentHref: function (href) {
         this.options.contentType = "href";
         this.options.content = false;
         this.options.href = href;
         this._setContent();
     },
 
-    setContentVideo: function(content){
+    setContentVideo: function (content) {
         this.options.contentType = "video";
         this.options.content = content;
         this.options.href = false;
         this._setContent();
     },
 
-    toggle: function(){
+    toggle: function () {
         var element = this.element;
         if (element.data('opened')) {
             this.close();
@@ -298,9 +307,13 @@ $.widget( "metro.dialog" , {
         }
     },
 
-    open: function(){
+    open: function () {
         var that = this, element = this.element, o = this.options;
         var overlay;
+
+        if (element.css('visibility') === 'visible') {
+            return;
+        }
 
         this._setPosition();
 
@@ -310,13 +323,16 @@ $.widget( "metro.dialog" , {
             overlay = this._overlay;
             overlay.appendTo('body').show();
             if (o.overlayClickClose) {
-                overlay.on('click', function(){
+                overlay.on('click', function () {
                     that.close();
                 });
             }
+            overlay.css('z-index', ++dialogIndex); //increase index for overlay
         }
 
-        //element.fadeIn();
+        element.css('z-index', ++dialogIndex); //increase index for dialog
+
+//        element.fadeIn();
         this._show();
 
         if (typeof o.onDialogOpen === 'function') {
@@ -325,27 +341,37 @@ $.widget( "metro.dialog" , {
             if (typeof window[o.onDialogOpen] === 'function') {
                 window[o.onDialogOpen](element);
             } else {
-                var result = eval("(function(){"+o.onDialogOpen+"})");
+                var result = eval("(function(){" + o.onDialogOpen + "})");
                 result.call(element);
             }
         }
 
         if (o.hide && parseInt(o.hide) > 0) {
-            this._interval = setTimeout(function(){
+            this._interval = setTimeout(function () {
                 that.close();
             }, parseInt(o.hide));
         }
     },
 
-    close: function(){
+    close: function () {
         var that = this, element = this.element, o = this.options;
 
         clearInterval(this._interval);
-
-        if (o.overlay) {
-            $('body').find('.dialog-overlay').remove();
+        if (element.css('visibility') !== 'visible') {
+            return;
         }
 
+        if (o.overlay) {
+            $('body').find('.dialog-overlay').each(function () {
+                if ($(this).hasClass(element.attr('id'))) {
+                    $(this).remove();
+                    --dialogIndex; //decrease index for overlay
+                }
+            });
+        }
+
+        --dialogIndex; //decrease index for dialog
+        
         element.data('opened', false);
 
         //element.fadeOut();
@@ -357,13 +383,13 @@ $.widget( "metro.dialog" , {
             if (typeof window[o.onDialogClose] === 'function') {
                 window[o.onDialogClose](element);
             } else {
-                var result = eval("(function(){"+o.onDialogClose+"})");
+                var result = eval("(function(){" + o.onDialogClose + "})");
                 result.call(element);
             }
         }
     },
 
-    reset: function(place){
+    reset: function (place) {
         if (place !== undefined) {
             this.options.place = place;
         }
@@ -373,14 +399,14 @@ $.widget( "metro.dialog" , {
     _destroy: function () {
     },
 
-    _setOption: function ( key, value ) {
+    _setOption: function (key, value) {
         this._super('_setOption', key, value);
     }
 });
 
 
 var dialog = {
-    open: function(el, place, content, contentType){
+    open: function (el, place, content, contentType) {
         var dialog = $(el), dialog_obj;
         if (dialog.length == 0) {
             console.log('Dialog ' + el + ' not found!');
@@ -396,9 +422,14 @@ var dialog = {
 
         if (content != undefined) {
             switch (contentType) {
-                case 'href': dialog_obj.setContentHref(content); break;
-                case 'video': dialog_obj.setContentVideo(content); break;
-                default: dialog_obj.setContent(content);
+                case 'href':
+                    dialog_obj.setContentHref(content);
+                    break;
+                case 'video':
+                    dialog_obj.setContentVideo(content);
+                    break;
+                default:
+                    dialog_obj.setContent(content);
             }
         }
 
@@ -409,7 +440,7 @@ var dialog = {
         dialog_obj.open();
     },
 
-    close: function(el){
+    close: function (el) {
         var dialog = $(el), dialog_obj;
         if (dialog.length == 0) {
             console.log('Dialog ' + el + ' not found!');
@@ -426,7 +457,7 @@ var dialog = {
         dialog_obj.close();
     },
 
-    toggle: function(el, place, content, contentType){
+    toggle: function (el, place, content, contentType) {
         var dialog = $(el), dialog_obj;
         if (dialog.length == 0) {
             console.log('Dialog ' + el + ' not found!');
@@ -442,9 +473,14 @@ var dialog = {
 
         if (content != undefined) {
             switch (contentType) {
-                case 'href': dialog_obj.setContentHref(content); break;
-                case 'video': dialog_obj.setContentVideo(content); break;
-                default: dialog_obj.setContent(content);
+                case 'href':
+                    dialog_obj.setContentHref(content);
+                    break;
+                case 'video':
+                    dialog_obj.setContentVideo(content);
+                    break;
+                default:
+                    dialog_obj.setContent(content);
             }
         }
 
@@ -458,26 +494,26 @@ var dialog = {
         }
     },
 
-    create: function(data){
+    create: function (data) {
         var dlg, id, html, buttons, button;
 
         id = "dialog_id_" + (new Date()).getTime();
-        dlg = $("<div id='"+id+"' class='dialog dialog-ex'></div>");
+        dlg = $("<div id='" + id + "' class='dialog dialog-ex'></div>");
 
         if (data.title !== undefined) {
-            $("<div class='dialog-title'>"+data.title+"</div>").appendTo(dlg);
+            $("<div class='dialog-title'>" + data.title + "</div>").appendTo(dlg);
         }
         if (data.content !== undefined) {
-            $("<div class='dialog-content'>"+data.content+"</div>").appendTo(dlg);
+            $("<div class='dialog-content'>" + data.content + "</div>").appendTo(dlg);
         }
         if (data.actions !== undefined && typeof data.actions == 'object') {
 
             buttons = $("<div class='dialog-actions'></div>").appendTo(dlg);
 
-            $.each(data.actions, function(){
+            $.each(data.actions, function () {
                 var item = this;
 
-                button = $("<button>").attr("type", "button").addClass("button").html(item.title);
+                button = $("<button>").attr("type", "button").addClass("button").addClass(item.class).html(item.title);
 
                 if (item.cls !== undefined) {
                     button.addClass(item.cls);
@@ -487,14 +523,14 @@ var dialog = {
 
                 if (item.onclick != undefined) {
 
-                    button[0].addEventListener("click", function(){
+                    button[0].addEventListener("click", function () {
                         if (typeof item.onclick === 'function') {
                             item.onclick(dlg);
                         } else {
                             if (typeof window[item.onclick] === 'function') {
                                 window[item.onclick](dlg);
                             } else {
-                                var result = eval("(function(){"+item.onclick+"})");
+                                var result = eval("(function(){" + item.onclick + "})");
                                 result.call(dlg);
                             }
                         }
@@ -504,6 +540,10 @@ var dialog = {
         }
 
         dlg.appendTo($("body"));
+
+        if (typeof data.callback === 'function') {
+            data.callback(dlg);
+        }
 
         var dlg_options = $.extend({}, {
             show: true,
@@ -517,14 +557,14 @@ var dialog = {
 
 window.metroDialog = dialog;
 
-$.Dialog = function(data){
+$.Dialog = function (data) {
     return dialog.create(data);
 };
 
-$(window).on('resize', function(){
+$(window).on('resize', function () {
     var dialogs = $('.dialog');
 
-    $.each(dialogs, function(){
+    $.each(dialogs, function () {
         var dlg = $(this).data('dialog'), element = dlg.element;
         if (element.data('opened') !== true) {
             return;
