@@ -1,5 +1,6 @@
 var widget_uuid = 0,
-    widget_slice = Array.prototype.slice;
+        widget_slice = Array.prototype.slice,
+        dialogIndex = 1050; //dialog's z-index
 
 $.cleanData = (function (orig) {
     return function (elems) {
